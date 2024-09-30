@@ -1,13 +1,12 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { Button } from "antd";
-import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
 
 export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Button type="primary">Primary Button</Button>
+        <Button type="primary">题库大全</Button>
         <Image src={`/assets/logo.png`} alt={`111`} width="64" height="64" />
         <Image
           className={styles.logo}

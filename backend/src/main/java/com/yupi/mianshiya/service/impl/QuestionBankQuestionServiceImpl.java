@@ -23,6 +23,7 @@ import com.yupi.mianshiya.service.UserService;
 import com.yupi.mianshiya.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,9 +46,11 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
     @Resource
     private UserService userService;
 
+    @Lazy
     @Resource
     private QuestionService questionService;
 
+    @Lazy
     @Resource
     private QuestionBankService questionBankService;
 
