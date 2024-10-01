@@ -13,6 +13,8 @@ import Link from "next/link";
 import GlobalFooter from "@/components/GlobalFooter";
 import "./index.css";
 import { menu } from "../../../config/menu";
+import { useSelector } from "react-redux";
+import { RootState } from "@/stores";
 
 const SearchInput = () => {
   const { token } = theme.useToken();
@@ -56,6 +58,9 @@ interface Props {
 
 export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
+
+  const loginUser = useSelector((state: RootState) => state.loginUser);
+
   return (
     <div
       id="basicLayout"
@@ -82,9 +87,9 @@ export default function BasicLayout({ children }: Props) {
         }}
         siderMenuType="group"
         avatarProps={{
-          src: "https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg",
+          src: loginUser.userAvatar || "/assets/logo.png",
           size: "small",
-          title: "叶丰华",
+          title: loginUser.userName || "叶丰华",
           render: (props, dom) => {
             return (
               <Dropdown
@@ -135,6 +140,7 @@ export default function BasicLayout({ children }: Props) {
           </Link>
         )}
       >
+        {JSON.stringify(loginUser)}
         {children}
       </ProLayout>
     </div>
