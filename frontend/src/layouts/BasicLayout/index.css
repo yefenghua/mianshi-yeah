@@ -1,3 +1,11 @@
-.basic-layout {
+/*.basic-layout {*/
+/*    */
+/*}*/
+
+.ant-layout-content {
     padding-bottom: 96px !important;
+}
+
+.ant-design-pro {
+    height: 100%;
 }

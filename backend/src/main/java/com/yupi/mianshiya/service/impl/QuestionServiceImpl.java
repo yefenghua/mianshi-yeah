@@ -214,9 +214,13 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                     .eq(QuestionBankQuestion::getQuestionBankId, questionBankId);
 
             List<QuestionBankQuestion> questionList = questionBankQuestionService.list(QuestionBankQuestionQueryWrapper);
-            Set<Long> questionIdSet=questionList.stream().map(QuestionBankQuestion::getQuestionId).collect(Collectors.toSet());
-            if (CollUtil.isNotEmpty(questionList))
+            if (CollUtil.isNotEmpty(questionList)){
+                Set<Long> questionIdSet=questionList.stream().map(QuestionBankQuestion::getQuestionId).collect(Collectors.toSet());
                 queryWrapper.in("id", questionIdSet);
+            }else {
+                return new Page<>(current, size);
+            }
+
         }
 
         // 查询数据库
