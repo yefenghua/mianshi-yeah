@@ -11,14 +11,15 @@ import * as questionController from './questionController';
 import * as questionBankController from './questionBankController';
 import * as questionBankQuestionController from './questionBankQuestionController';
 import * as userController from './userController';
+
 export default {
-  wxMpController,
-  fileController,
-  postController,
-  postFavourController,
-  postThumbController,
-  questionController,
-  questionBankController,
-  questionBankQuestionController,
-  userController,
+    wxMpController,
+    fileController,
+    postController,
+    postFavourController,
+    postThumbController,
+    questionController,
+    questionBankController,
+    questionBankQuestionController,
+    userController,
 };

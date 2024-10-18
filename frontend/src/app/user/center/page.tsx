@@ -17,7 +17,7 @@ export default function UserCenterPage() {
 
     const user = loginUser;
 
-    const [activeTabKey,setActiveTabKey] = React.useState<string>();
+    const [activeTabKey, setActiveTabKey] = React.useState<string>();
 
     return (
         <div id="userCenterPage" className="max-width-content">
@@ -25,8 +25,8 @@ export default function UserCenterPage() {
                 <Col xs={24} md={6}>
                     <Card style={{textAlign: "center"}}>
                         <Avatar src={user.userAvatar} alt="avatar" size={72}/>
-                        <div style={{marginBottom:16}}/>
-                        <Card.Meta title={<Title level={4} style={{marginBottom:0}}>{user.userName}</Title>}
+                        <div style={{marginBottom: 16}}/>
+                        <Card.Meta title={<Title level={4} style={{marginBottom: 0}}>{user.userName}</Title>}
                                    description={<Paragraph type={"secondary"}>{user.userProfile}</Paragraph>}/>
                     </Card>
                 </Col>
@@ -41,17 +41,17 @@ export default function UserCenterPage() {
                             label: "其他"
                         },
                     ]}
-                    activeTabKey={activeTabKey}
-                          onTabChange={(key:string)=>{
+                          activeTabKey={activeTabKey}
+                          onTabChange={(key: string) => {
                               setActiveTabKey(key);
                           }}
                     >
-                        {activeTabKey==='record' && (
+                        {activeTabKey === 'record' && (
                             <>
                                 <CalendarChart/>
                             </>
                         )}
-                        {activeTabKey==='others' && <>bbbb</>}
+                        {activeTabKey === 'others' && <>bbbb</>}
                     </Card>
                 </Col>
             </Row>

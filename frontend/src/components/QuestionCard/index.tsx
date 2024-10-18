@@ -7,7 +7,7 @@ import MdViewer from "@/components/MdViewer";
 import useAddUserSignInRecord from "@/hooks/useAddUserSignInRecord";
 
 interface Props {
-    question:API.QuestionVO;
+    question: API.QuestionVO;
 }
 
 /**
@@ -23,7 +23,7 @@ const QuestionCard = (props: Props) => {
     return (
         <div className="question-card">
             <Card>
-                <Title level={1} style={{fontSize:24}}>{question.title}</Title>
+                <Title level={1} style={{fontSize: 24}}>{question.title}</Title>
                 <TagList tagList={question.tagList}/>
                 <div style={{marginBottom: 16}}/>
                 <MdViewer value={question.content}/>

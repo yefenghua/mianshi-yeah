@@ -10,7 +10,7 @@ export default async function BanksPage() {
     let questionBankList = [];
 
     // 题库数量不多，直接全量获取
-    const pageSize=200;
+    const pageSize = 200;
     try {
         const res = await listQuestionBankVoByPageUsingPost({
             pageSize: pageSize,

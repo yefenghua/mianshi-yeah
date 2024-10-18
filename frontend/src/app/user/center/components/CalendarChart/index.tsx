@@ -71,7 +71,6 @@ const CalendarChart = (props: Props) => {
     };
 
 
-
     return <ReactECharts className="calendar-chart" option={options}/>
 };
 

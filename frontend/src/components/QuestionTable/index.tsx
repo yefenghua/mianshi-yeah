@@ -1,10 +1,10 @@
 "use client";
-import { listQuestionVoByPageUsingPost } from "@/api/questionController";
-import type { ActionType, ProColumns } from "@ant-design/pro-components";
-import { ProTable } from "@ant-design/pro-components";
-import React, { useRef, useState } from "react";
+import {searchQuestionVoByPageUsingPost} from "@/api/questionController";
+import type {ActionType, ProColumns} from "@ant-design/pro-components";
+import {ProTable} from "@ant-design/pro-components";
+import React, {useRef, useState} from "react";
 import TagList from "@/components/TagList";
-import { TablePaginationConfig } from "antd";
+import {TablePaginationConfig} from "antd";
 import Link from "next/link";
 import "./index.css";
 
@@ -22,7 +22,7 @@ interface Props {
  * @constructor
  */
 const QuestionTable: React.FC = (props: Props) => {
-    const { defaultQuestionList, defaultTotal, defaultSearchParams = {} } = props;
+    const {defaultQuestionList, defaultTotal, defaultSearchParams = {}} = props;
     const actionRef = useRef<ActionType>();
     // 题目列表
     const [questionList, setQuestionList] = useState<API.QuestionVO[]>(
@@ -37,6 +37,12 @@ const QuestionTable: React.FC = (props: Props) => {
      * 表格列配置
      */
     const columns: ProColumns<API.QuestionVO>[] = [
+        {
+            title: "搜索",
+            dataIndex: "searchText",
+            valueType: "text",
+            hideInTable: true,
+        },
         {
             title: "标题",
             dataIndex: "title",
@@ -53,7 +59,7 @@ const QuestionTable: React.FC = (props: Props) => {
                 mode: "tags",
             },
             render: (_, record) => {
-                return <TagList tagList={record.tagList} />;
+                return <TagList tagList={record.tagList}/>;
             },
         },
     ];
@@ -91,9 +97,9 @@ const QuestionTable: React.FC = (props: Props) => {
                     const sortField = Object.keys(sort)?.[0] || "createTime";
                     const sortOrder = sort?.[sortField] || "descend";
 
-                    const { data, code } = await listQuestionVoByPageUsingPost({
+                    const {data, code} = await searchQuestionVoByPageUsingPost({
                         ...params,
-                        sortField,
+                        sortField: '_score',
                         sortOrder,
                         ...filter,
                     } as API.QuestionQueryRequest);

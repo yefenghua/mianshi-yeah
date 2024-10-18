@@ -104,8 +104,7 @@ export default function BasicLayout({children}: Props) {
                                         const {key} = event;
                                         if (key === "logout") {
                                             userLogout();
-                                        }
-                                        else if (key === "userCenter") {
+                                        } else if (key === "userCenter") {
                                             router.push("/user/center");
                                         }
                                     },

@@ -10,10 +10,10 @@
         <version>2.7.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.yupi</groupId>
-    <artifactId>mianshiya-backend</artifactId>
+    <groupId>com.yefenghua</groupId>
+    <artifactId>mianshiye-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mianshiya-backend</name>
+    <name>mianshiye-backend</name>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -34,6 +34,12 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.2.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.zaxxer</groupId>
+                    <artifactId>HikariCP</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
         <dependency>
@@ -123,6 +129,19 @@
             <artifactId>redisson</artifactId>
             <version>3.37.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.22</version>
+        </dependency>
+        <dependency>
+            <artifactId>hotkey-client</artifactId>
+            <groupId>com.jd.platform.hotkey</groupId>
+            <version>0.0.4-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>

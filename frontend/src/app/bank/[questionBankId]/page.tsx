@@ -27,8 +27,8 @@ export default async function BankPage({params}) {
     }
 
     let firstQuestionId;
-    if (bank?.questionPage?.records && bank.questionPage.records.length>0){
-        firstQuestionId=bank.questionPage.records[0].id;
+    if (bank?.questionPage?.records && bank.questionPage.records.length > 0) {
+        firstQuestionId = bank.questionPage.records[0].id;
     }
 
     return <div id="bankPage" className="max-width-content">
@@ -43,7 +43,9 @@ export default async function BankPage({params}) {
                         >
                             {bank.description}
                         </Paragraph>
-                        <Button type={"primary"} shape={"round"} href={`/bank/${questionBankId}/question/${firstQuestionId}`} target={"_blank"} disabled={!firstQuestionId}>
+                        <Button type={"primary"} shape={"round"}
+                                href={`/bank/${questionBankId}/question/${firstQuestionId}`} target={"_blank"}
+                                disabled={!firstQuestionId}>
                             开始刷题
                         </Button>
                     </>

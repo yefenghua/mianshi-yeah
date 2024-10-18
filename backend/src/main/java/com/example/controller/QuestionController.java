@@ -1,9 +1,6 @@
 package com.example.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.annotation.AuthCheck;
 import com.example.common.BaseResponse;
@@ -13,17 +10,13 @@ import com.example.common.ResultUtils;
 import com.example.constant.UserConstant;
 import com.example.exception.BusinessException;
 import com.example.exception.ThrowUtils;
-import com.example.model.dto.question.QuestionAddRequest;
-import com.example.model.dto.question.QuestionEditRequest;
-import com.example.model.dto.question.QuestionQueryRequest;
-import com.example.model.dto.question.QuestionUpdateRequest;
+import com.example.model.dto.question.*;
 import com.example.model.entity.Question;
-import com.example.model.entity.QuestionBankQuestion;
 import com.example.model.entity.User;
 import com.example.model.vo.QuestionVO;
-import com.example.service.QuestionBankQuestionService;
 import com.example.service.QuestionService;
 import com.example.service.UserService;
+import com.jd.platform.hotkey.client.callback.JdHotKeyStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -147,11 +140,27 @@ public class QuestionController {
     @GetMapping("/get/vo")
     public BaseResponse<QuestionVO> getQuestionVOById(long id, HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
+
+        // 热key探测
+        String key="question_detail_"+id;
+        if (JdHotKeyStore.isHotKey(key)){
+            Object cachedQuestionVO = JdHotKeyStore.get(key);
+            if (cachedQuestionVO !=null){
+                return ResultUtils.success((QuestionVO) cachedQuestionVO);
+            }
+        }
+
         // 查询数据库
         Question question = questionService.getById(id);
         ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
+
         // 获取封装类
-        return ResultUtils.success(questionService.getQuestionVO(question, request));
+        QuestionVO questionVO = questionService.getQuestionVO(question, request);
+
+        // 设置本地缓存(如果不是热key，无法触发缓存)
+        JdHotKeyStore.smartSet(key,questionVO);
+
+        return ResultUtils.success(questionVO);
     }
 
     /**
@@ -264,5 +273,13 @@ public class QuestionController {
         // 查询数据库（作为没有 ES 的降级方案）
         // Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+    }
+
+    @PostMapping("/delete/batch")
+    @AuthCheck(mustRole=UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> batchDeleteQuestions(@RequestBody QuestionBatchDeleteRequest questionBatchDeleteRequest) {
+        ThrowUtils.throwIf(questionBatchDeleteRequest == null, ErrorCode.PARAMS_ERROR);
+        questionService.batchDeleteQuestions(questionBatchDeleteRequest.getQuestionIdList());
+        return ResultUtils.success(true);
     }
 }

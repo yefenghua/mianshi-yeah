@@ -37,6 +37,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -315,4 +316,22 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return page;
     }
 
+    /**
+     * 批量删除题目
+     * @param questionIdList
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchDeleteQuestions(List<Long> questionIdList) {
+        ThrowUtils.throwIf(CollUtil.isEmpty(questionIdList),ErrorCode.PARAMS_ERROR,"要删除的题目列表不为空");
+        for (Long questionId : questionIdList) {
+            boolean result = this.removeById(questionId);
+            ThrowUtils.throwIf(!result,ErrorCode.OPERATION_ERROR,"删除题目失败");
+
+            LambdaQueryWrapper<QuestionBankQuestion> lambdaQueryWrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class)
+                    .eq(QuestionBankQuestion::getQuestionId, questionId);
+            result = questionBankQuestionService.remove(lambdaQueryWrapper);
+            ThrowUtils.throwIf(!result,ErrorCode.OPERATION_ERROR,"删除题目题库关联失败");
+        }
+    }
 }

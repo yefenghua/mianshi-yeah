@@ -43,9 +43,9 @@ const UpdateModal: React.FC<Props> = (props) => {
     }
 
     // 初始化值并表单转换
-    const initValues= {...oldData};
-    if (oldData.tags){
-        initValues.tags=JSON.parse(oldData.tags)||[];
+    const initValues = {...oldData};
+    if (oldData.tags) {
+        initValues.tags = JSON.parse(oldData.tags) || [];
     }
 
     return (

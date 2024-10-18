@@ -3,7 +3,6 @@ import "./index.css";
 import {message} from "antd";
 import {getQuestionVoByIdUsingGet} from "@/api/questionController";
 import QuestionCard from "@/components/QuestionCard";
-import Link from "next/link";
 
 export default async function QuestionPage({params}) {
     const {questionBankId, questionId} = params;

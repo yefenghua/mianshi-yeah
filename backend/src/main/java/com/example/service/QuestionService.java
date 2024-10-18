@@ -11,6 +11,7 @@ import com.example.model.entity.Question;
 import com.example.model.vo.QuestionVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 题目服务
@@ -57,6 +58,8 @@ public interface QuestionService extends IService<Question> {
      * @return
      */
     Page<Question> searchFromEs(QuestionQueryRequest questionQueryRequest);
+
+    void batchDeleteQuestions(List<Long> questionIdList);
 
     /**
      * 分页获取题目封装

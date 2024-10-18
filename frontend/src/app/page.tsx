@@ -11,7 +11,7 @@ import QuestionList from "@/components/QuestionList";
 export default async function HomePage() {
 
     let questionBankList = [];
-    let questionList=[];
+    let questionList = [];
     try {
         const res = await listQuestionVoByPageUsingPost({
             pageSize: 12,

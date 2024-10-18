@@ -1,8 +1,9 @@
-import { Input } from "antd";
-import { useRouter } from "next/navigation";
+import {Input} from "antd";
+import {useRouter} from "next/navigation";
 import "./index.css";
 
-interface Props {}
+interface Props {
+}
 
 /**
  * 搜索条组件
