@@ -1,5 +1,11 @@
 package com.example.controller;
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.EntryType;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.Tracer;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.annotation.AuthCheck;
 import com.example.common.BaseResponse;
@@ -10,9 +16,12 @@ import com.example.config.WxOpenConfig;
 import com.example.constant.UserConstant;
 import com.example.exception.BusinessException;
 import com.example.exception.ThrowUtils;
+import com.example.model.dto.question.QuestionQueryRequest;
 import com.example.model.dto.user.*;
+import com.example.model.entity.Question;
 import com.example.model.entity.User;
 import com.example.model.vo.LoginUserVO;
+import com.example.model.vo.QuestionVO;
 import com.example.model.vo.UserVO;
 import com.example.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -88,6 +97,47 @@ public class UserController {
         LoginUserVO loginUserVO = userService.userLogin(userAccount, userPassword, request);
         return ResultUtils.success(loginUserVO);
     }
+
+    /**
+     * 用户登录 限流版
+     *
+     * @param userLoginRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/login/sentinel")
+    public BaseResponse<LoginUserVO> userLoginSentinel(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
+        if (userLoginRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String userAccount = userLoginRequest.getUserAccount();
+        String userPassword = userLoginRequest.getUserPassword();
+        if (StringUtils.isAnyBlank(userAccount, userPassword)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        // 基于Ip限流
+        String remoteAddr = request.getRemoteAddr();
+        Entry entry = null;
+        try {
+            entry = SphU.entry("userLogin", EntryType.IN, 1, remoteAddr);
+            LoginUserVO loginUserVO = userService.userLogin(userAccount, userPassword, request);
+            return ResultUtils.success(loginUserVO);
+        } catch (Throwable ex) {
+            // 业务异常
+            if (!BlockException.isBlockException(ex)){
+                Tracer.trace(ex);
+                return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误");
+            }
+            // 限流操作
+            return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
+        } finally {
+            if (entry != null) {
+                entry.exit(1, remoteAddr);
+            }
+        }
+    }
+
 
     /**
      * 用户登录（微信开放平台）
